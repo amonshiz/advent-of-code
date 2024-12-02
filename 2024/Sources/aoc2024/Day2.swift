@@ -1,8 +1,8 @@
-import Foundation
 import ArgumentParser
+import Foundation
 import Parsing
 
-extension Array where Element == Int {
+extension [Int] {
     func isSafeLevels() -> Bool {
         guard count > 1 else {
             return true
@@ -11,10 +11,10 @@ extension Array where Element == Int {
         let first = self[0]
         let second = self[1]
 
-        let toCheck = first < second ? self : self.reversed()
+        let toCheck = first < second ? self : reversed()
         for (current, next) in zip(toCheck, toCheck.dropFirst()) {
             let diff = next - current
-            guard 1 <= diff, diff <= 3 else {
+            guard diff >= 1, diff <= 3 else {
                 return false
             }
         }
@@ -32,7 +32,7 @@ struct Day2: ParsableCommand {
         let levels: [Int]
 
         var isSafe: Bool {
-            return levels.isSafeLevels()
+            levels.isSafeLevels()
         }
 
         var isSafe2: Bool {
@@ -41,15 +41,15 @@ struct Day2: ParsableCommand {
             }
 
             func fixedLevels(excluding: Int) -> [Int] {
-                return Array(levels.enumerated().filter { $0.offset != excluding }.map { $0.element })
+                Array(levels.enumerated().filter { $0.offset != excluding }.map(\.element))
             }
 
             guard !levels.isSafeLevels() else {
                 return true
             }
 
-            for i in 0..<levels.count {
-                guard !fixedLevels(excluding: i).isSafeLevels() else {
+            for index in 0 ..< levels.count {
+                guard !fixedLevels(excluding: index).isSafeLevels() else {
                     return true
                 }
             }
