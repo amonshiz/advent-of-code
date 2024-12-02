@@ -7,6 +7,7 @@ struct AOC2024: ParsableCommand {
         abstract: "Solutions for Advent of Code 2024",
         subcommands: [
             Day1.self,
+            Day2.self,
         ]
     )
 }
