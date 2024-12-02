@@ -17,7 +17,7 @@ let package = Package(
             name: "aoc2024",
             dependencies: [
                 .product(name: "ArgumentParser", package: "swift-argument-parser"),
-                .product(name: "Parsing", package: "swift-parsing")
+                .product(name: "Parsing", package: "swift-parsing"),
             ]
         ),
     ]

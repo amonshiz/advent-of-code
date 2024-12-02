@@ -70,7 +70,7 @@ struct Day1: ParsableCommand {
             let sortedLeft = left.sorted()
             let sortedRight = right.sorted()
             let result = zip(sortedLeft, sortedRight).reduce(0) { acc, next in
-                return acc + abs(next.0 - next.1)
+                acc + abs(next.0 - next.1)
             }
 
             print("result", result)
@@ -103,7 +103,7 @@ struct Day1: ParsableCommand {
                 acc[next, default: 0] += 1
             }
             let result = left.reduce(0) { acc, next in
-                return acc + next * rightCounts[next, default: 0]
+                acc + next * rightCounts[next, default: 0]
             }
             print("result", result)
         }
