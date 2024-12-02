@@ -3,9 +3,14 @@
         {
             "type": "lldb",
             "request": "launch",
-            "args": ["--input", "${workspaceFolder:2024}/problems/day1-1.txt"],
+            "args": [
+                "day1",
+                "part1",
+                "--input",
+                "${workspaceFolder:2024}/problems/day1-1.txt"
+            ],
             "cwd": "${workspaceFolder:2024}",
-            "name": "Debug aoc2024",
+            "name": "Debug aoc2024 day1 part1",
             "program": "${workspaceFolder:2024}/.build/debug/aoc2024",
             "preLaunchTask": "swift: Build Debug aoc2024"
         },
@@ -17,6 +22,15 @@
             "name": "Release aoc2024",
             "program": "${workspaceFolder:2024}/.build/release/aoc2024",
             "preLaunchTask": "swift: Build Release aoc2024"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "args": [],
+            "cwd": "${workspaceFolder:2024}",
+            "name": "Debug aoc2024",
+            "program": "${workspaceFolder:2024}/.build/debug/aoc2024",
+            "preLaunchTask": "swift: Build Debug aoc2024"
         }
     ]
 }
