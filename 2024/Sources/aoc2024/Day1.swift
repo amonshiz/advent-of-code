@@ -45,7 +45,7 @@ struct Day1: ParsableCommand {
             Part2.self,
         ]
     )
-    
+
     // Nested Part1 command
     struct Part1: ParsableCommand {
         static let configuration = CommandConfiguration(
@@ -53,13 +53,13 @@ struct Day1: ParsableCommand {
         )
 
         @OptionGroup var options: Options
-        
+
         func validate() throws {
             guard FileManager.default.fileExists(atPath: options.inputPath.path()) else {
                 throw ValidationError("File does not exist at \(options.inputPath.path())")
             }
         }
-        
+
         func run() throws {
             let pairsContent = try String(contentsOf: options.inputPath, encoding: .utf8)
             let pairs = try IDPairsParser().parse(pairsContent)

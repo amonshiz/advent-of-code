@@ -1,0 +1,8 @@
+disabled_rules:
+  - nesting
+  - private_over_fileprivate
+  - trailing_comma
+  - blanket_disable_command
+
+excluded:
+  - .build
