@@ -42,7 +42,7 @@ struct Day1: ParsableCommand {
         abstract: "Solutions for Day 1",
         subcommands: [
             Part1.self,
-            // Part2.self
+            Part2.self,
         ]
     )
     
@@ -76,4 +76,36 @@ struct Day1: ParsableCommand {
             print("result", result)
         }
     }
-} 
+
+    struct Part2: ParsableCommand {
+        static let configuration = CommandConfiguration(
+            abstract: "Day 1 - Part 2 solution"
+        )
+
+        @OptionGroup var options: Options
+
+        func validate() throws {
+            guard FileManager.default.fileExists(atPath: options.inputPath.path()) else {
+                throw ValidationError("File does not exist at \(options.inputPath.path())")
+            }
+        }
+
+        func run() throws {
+            let pairsContent = try String(contentsOf: options.inputPath, encoding: .utf8)
+            let pairs = try IDPairsParser().parse(pairsContent)
+            let (left, right) = pairs.reduce(into: ([Int](), [Int]())) { acc, next in
+                acc.0.append(next.leftID)
+                acc.1.append(next.rightID)
+            }
+
+            // Count the number of instances of each number in the right array
+            let rightCounts = right.reduce(into: [Int: Int]()) { acc, next in
+                acc[next, default: 0] += 1
+            }
+            let result = left.reduce(0) { acc, next in
+                return acc + next * rightCounts[next, default: 0]
+            }
+            print("result", result)
+        }
+    }
+}
