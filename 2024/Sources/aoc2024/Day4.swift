@@ -6,7 +6,7 @@ struct Day4: ParsableCommand {
         abstract: "Day 4",
         subcommands: [
             Part1.self,
-            Part2.self
+            Part2.self,
         ]
     )
 
@@ -24,7 +24,7 @@ struct Day4: ParsableCommand {
     enum Direction: CaseIterable {
         case left
         case right
-        case up
+        case up // swiftlint:disable:this identifier_name
         case down
         case leftUp
         case leftDown
@@ -32,7 +32,7 @@ struct Day4: ParsableCommand {
         case rightDown
 
         func indices(for lineIndex: Int, characterIndex: Int, length: Int) -> [(Int, Int)] {
-            let range = 0..<length
+            let range = 0 ..< length
             switch self {
             case .left:
                 return range.map { (lineIndex, characterIndex - $0) }
@@ -54,10 +54,24 @@ struct Day4: ParsableCommand {
         }
     }
 
-    static func collectCharacters(beginning characterIndex: Int, within lineIndex: Int, in lines: [[Character]], direction: Direction, length: Int) -> [Character] {
+    static func collectCharacters(
+        beginning characterIndex: Int,
+        within lineIndex: Int,
+        in lines: [[Character]],
+        direction: Direction,
+        length: Int
+    ) -> [Character] {
         var characters = [Character]()
-        for (nextLineIndex, nextCharacterIndex) in direction.indices(for: lineIndex, characterIndex: characterIndex, length: length) {
-            guard nextLineIndex >= 0, nextLineIndex < lines.count, nextCharacterIndex >= 0, nextCharacterIndex < lines[nextLineIndex].count else {
+        for (nextLineIndex, nextCharacterIndex) in direction.indices(
+            for: lineIndex,
+            characterIndex: characterIndex,
+            length: length
+        ) {
+            guard nextLineIndex >= 0,
+                  nextLineIndex < lines.count,
+                  nextCharacterIndex >= 0,
+                  nextCharacterIndex < lines[nextLineIndex].count
+            else {
                 return []
             }
             characters.append(lines[nextLineIndex][nextCharacterIndex])
@@ -92,7 +106,13 @@ struct Day4: ParsableCommand {
             let xmas: [Character] = Array("XMAS")
             var count = 0
             for direction in Direction.allCases {
-                let characters = collectCharacters(beginning: characterIndex, within: lineIndex, in: lines, direction: direction, length: 4)
+                let characters = collectCharacters(
+                    beginning: characterIndex,
+                    within: lineIndex,
+                    in: lines,
+                    direction: direction,
+                    length: 4
+                )
                 // print("direction: \(direction), characters: \(characters)")
                 if characters == xmas {
                     count += 1
@@ -107,8 +127,8 @@ struct Day4: ParsableCommand {
             let lines = input.split(separator: "\n")
             let characters = lines.map { Array($0) }
             var count = 0
-            for lineIndex in 0..<characters.count {
-                for characterIndex in 0..<characters[lineIndex].count {
+            for lineIndex in 0 ..< characters.count {
+                for characterIndex in 0 ..< characters[lineIndex].count {
                     count += xmases(beginning: characterIndex, within: lineIndex, in: characters)
                 }
             }
@@ -137,14 +157,37 @@ struct Day4: ParsableCommand {
             // - right-down
             // But to do this, we need to start at the proposed beginning and check in the opposite direction.
             // Start to the left-up direction and move to the right-down
-            let leftUpResult = collectCharacters(beginning: characterIndex - 1, within: lineIndex - 1, in: lines, direction: .rightDown, length: 3)
+            let leftUpResult = collectCharacters(
+                beginning: characterIndex - 1,
+                within: lineIndex - 1,
+                in: lines,
+                direction: .rightDown,
+                length: 3
+            )
             // Start to the left-down direction and move to the right-up
-            let leftDownResult = collectCharacters(beginning: characterIndex - 1, within: lineIndex + 1, in: lines, direction: .rightUp, length: 3)
+            let leftDownResult = collectCharacters(
+                beginning: characterIndex - 1,
+                within: lineIndex + 1,
+                in: lines,
+                direction: .rightUp,
+                length: 3
+            )
             // Start to the right-up direction and move to the left-down
-            let rightUpResult = collectCharacters(beginning: characterIndex + 1, within: lineIndex - 1, in: lines, direction: .leftDown, length: 3)
+            let rightUpResult = collectCharacters(
+                beginning: characterIndex + 1,
+                within: lineIndex - 1,
+                in: lines,
+                direction: .leftDown,
+                length: 3
+            )
             // Start to the right-down direction and move to the left-up
-            let rightDownResult = collectCharacters(beginning: characterIndex + 1, within: lineIndex + 1, in: lines, direction: .leftUp, length: 3)
-            // print("leftUpResult: \(leftUpResult), leftDownResult: \(leftDownResult), rightUpResult: \(rightUpResult), rightDownResult: \(rightDownResult)")
+            let rightDownResult = collectCharacters(
+                beginning: characterIndex + 1,
+                within: lineIndex + 1,
+                in: lines,
+                direction: .leftUp,
+                length: 3
+            )
             let results = [leftUpResult, leftDownResult, rightUpResult, rightDownResult]
             guard results.allSatisfy({ $0 == mas || $0.reversed() == mas }) else {
                 return 0
@@ -158,8 +201,8 @@ struct Day4: ParsableCommand {
             let lines = input.split(separator: "\n")
             let characters = lines.map { Array($0) }
             var count = 0
-            for lineIndex in 0..<characters.count {
-                for characterIndex in 0..<characters[lineIndex].count {
+            for lineIndex in 0 ..< characters.count {
+                for characterIndex in 0 ..< characters[lineIndex].count {
                     count += x_mases(beginning: characterIndex, within: lineIndex, in: characters)
                 }
             }
