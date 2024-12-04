@@ -1,5 +1,5 @@
-import Foundation
 import ArgumentParser
+import Foundation
 import Parsing
 
 struct Day3: ParsableCommand {
@@ -14,7 +14,7 @@ struct Day3: ParsableCommand {
     struct Options: ParsableArguments {
         @Option(
             name: [.customLong("input")],
-        help: "Path to the input file",
+            help: "Path to the input file",
             transform: URL.init(fileURLWithPath:)
         )
         var input: URL
@@ -26,8 +26,10 @@ struct Day3: ParsableCommand {
         }
     }
 
+    // swiftlint:disable type_name
     enum Op {
         case mul(MulOperation)
+        // swiftlint:disable:next identifier_name
         case on
         case off
         case noop(String)
@@ -149,14 +151,16 @@ struct Day3: ParsableCommand {
 
             var result = 0
             var isOn = true
+            // swiftlint:disable:next identifier_name
             for op in ops {
                 switch op {
                 case .on: isOn = true
                 case .off: isOn = false
-                case .mul(let op):
+                // swiftlint:disable:next identifier_name
+                case let .mul(op):
                     if isOn {
                         result += op.left * op.right
-                   }
+                    }
                 case .noop:
                     break
                 }
