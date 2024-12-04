@@ -108,10 +108,18 @@ struct Day3: ParsableCommand {
         @OptionGroup var options: Options
 
         struct SkipToMulParser: Parser {
-            var body: some Parser<Substring, Void> {
-                Skip {
-                    PrefixUpTo("mul(".utf8)
-                    "mul("
+            var body: some Parser<Substring, String> {
+                PrefixThrough("mul(").map(.string)
+            }
+        }
+
+        struct OnlyMulOperationParser: Parser {
+            var body: some Parser<Substring, MulOperation> {
+                Parse(MulOperation.init) {
+                    Int.parser()
+                    ","
+                    Int.parser()
+                    ")"
                 }
             }
         }
@@ -120,7 +128,7 @@ struct Day3: ParsableCommand {
             var body: some Parser<Substring, [MulOperation]> {
                 Many {
                     OneOf {
-                        MulOperationParser()
+                        OnlyMulOperationParser()
                         SkipToMulParser().map { _ in MulOperation(left: 0, right: 0) }
                     }
                 } terminator: {
@@ -134,6 +142,7 @@ struct Day3: ParsableCommand {
             let mulOperations = try MulOperationsParser().parse(input)
             let result = mulOperations.reduce(0) { $0 + ($1.left * $1.right) }
             print(result)
+            assert(result == 156_388_521)
         }
     }
 
