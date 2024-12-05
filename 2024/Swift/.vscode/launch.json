@@ -7,11 +7,11 @@
                 "day1",
                 "part1",
                 "--input",
-                "${workspaceFolder:2024}/problems/day1-1.txt"
+                "${workspaceFolder:Swift}/problems/day1-1.txt"
             ],
-            "cwd": "${workspaceFolder:2024}",
+            "cwd": "${workspaceFolder:Swift}",
             "name": "Debug aoc2024 day1 part1",
-            "program": "${workspaceFolder:2024}/.build/debug/aoc2024",
+            "program": "${workspaceFolder:Swift}/.build/debug/aoc2024",
             "preLaunchTask": "swift: Build Debug aoc2024"
         },
         {
@@ -21,11 +21,11 @@
                 "day1",
                 "part2",
                 "--input",
-                "${workspaceFolder:2024}/problems/day1-1.txt"
+                "${workspaceFolder:Swift}/problems/day1-1.txt"
             ],
-            "cwd": "${workspaceFolder:2024}",
+            "cwd": "${workspaceFolder:Swift}",
             "name": "Debug aoc2024 day1 part2",
-            "program": "${workspaceFolder:2024}/.build/debug/aoc2024",
+            "program": "${workspaceFolder:Swift}/.build/debug/aoc2024",
             "preLaunchTask": "swift: Build Debug aoc2024"
         },
         {
@@ -35,11 +35,11 @@
                 "day2",
                 "part1",
                 "--input",
-                "${workspaceFolder:2024}/problems/day2-1.txt"
+                "${workspaceFolder:Swift}/problems/day2-1.txt"
             ],
-            "cwd": "${workspaceFolder:2024}",
-            "name": "Debug aoc2024 day2 part1",
-            "program": "${workspaceFolder:2024}/.build/debug/aoc2024",
+            "cwd": "${workspaceFolder:Swift}",
+            "name": "Debug aocSwift day2 part1",
+            "program": "${workspaceFolder:Swift}/.build/debug/aoc2024",
             "preLaunchTask": "swift: Build Debug aoc2024"
         },
         {
@@ -49,11 +49,11 @@
                 "day2",
                 "part2",
                 "--input",
-                "${workspaceFolder:2024}/problems/day2-1.txt"
+                "${workspaceFolder:Swift}/problems/day2-1.txt"
             ],
-            "cwd": "${workspaceFolder:2024}",
+            "cwd": "${workspaceFolder:Swift}",
             "name": "Debug aoc2024 day2 part2",
-            "program": "${workspaceFolder:2024}/.build/debug/aoc2024",
+            "program": "${workspaceFolder:Swift}/.build/debug/aoc2024",
             "preLaunchTask": "swift: Build Debug aoc2024"
         },
         {
@@ -63,11 +63,11 @@
                 "day2",
                 "part2",
                 "--input",
-                "${workspaceFolder:2024}/problems/day2-1-sample.txt"
+                "${workspaceFolder:Swift}/problems/day2-1-sample.txt"
             ],
-            "cwd": "${workspaceFolder:2024}",
+            "cwd": "${workspaceFolder:Swift}",
             "name": "Debug sample aoc2024 day2 part2",
-            "program": "${workspaceFolder:2024}/.build/debug/aoc2024",
+            "program": "${workspaceFolder:Swift}/.build/debug/aoc2024",
             "preLaunchTask": "swift: Build Debug aoc2024"
         },
         {
@@ -77,11 +77,11 @@
                 "day3",
                 "part1",
                 "--input",
-                "${workspaceFolder:2024}/problems/day3-1.txt"
+                "${workspaceFolder:Swift}/problems/day3-1.txt"
             ],
-            "cwd": "${workspaceFolder:2024}",
+            "cwd": "${workspaceFolder:Swift}",
             "name": "Debug aoc2024 day3 part1",
-            "program": "${workspaceFolder:2024}/.build/debug/aoc2024",
+            "program": "${workspaceFolder:Swift}/.build/debug/aoc2024",
             "preLaunchTask": "swift: Build Debug aoc2024"
         },
         {
@@ -91,11 +91,11 @@
                 "day3",
                 "part2",
                 "--input",
-                "${workspaceFolder:2024}/problems/day3-1.txt"
+                "${workspaceFolder:Swift}/problems/day3-1.txt"
             ],
-            "cwd": "${workspaceFolder:2024}",
+            "cwd": "${workspaceFolder:Swift}",
             "name": "Debug aoc2024 day3 part2",
-            "program": "${workspaceFolder:2024}/.build/debug/aoc2024",
+            "program": "${workspaceFolder:Swift}/.build/debug/aoc2024",
             "preLaunchTask": "swift: Build Debug aoc2024"
         },
         {
@@ -105,11 +105,11 @@
                 "day4",
                 "part1",
                 "--input",
-                "${workspaceFolder:2024}/problems/day4-1.txt"
+                "${workspaceFolder:Swift}/problems/day4-1.txt"
             ],
-            "cwd": "${workspaceFolder:2024}",
+            "cwd": "${workspaceFolder:Swift}",
             "name": "Debug aoc2024 day4 part1",
-            "program": "${workspaceFolder:2024}/.build/debug/aoc2024",
+            "program": "${workspaceFolder:Swift}/.build/debug/aoc2024",
             "preLaunchTask": "swift: Build Debug aoc2024"
         },
         {
@@ -119,11 +119,11 @@
                 "day4",
                 "part2",
                 "--input",
-                "${workspaceFolder:2024}/problems/day4-1.txt"
+                "${workspaceFolder:Swift}/problems/day4-1.txt"
             ],
-            "cwd": "${workspaceFolder:2024}",
+            "cwd": "${workspaceFolder:Swift}",
             "name": "Debug aoc2024 day4 part2",
-            "program": "${workspaceFolder:2024}/.build/debug/aoc2024",
+            "program": "${workspaceFolder:Swift}/.build/debug/aoc2024",
             "preLaunchTask": "swift: Build Debug aoc2024"
         },
         {
@@ -133,11 +133,11 @@
                 "day5",
                 "part1",
                 "--input",
-                "${workspaceFolder:2024}/problems/day5-1.txt"
+                "${workspaceFolder:Swift}/problems/day5-1.txt"
             ],
-            "cwd": "${workspaceFolder:2024}",
+            "cwd": "${workspaceFolder:Swift}",
             "name": "Debug aoc2024 day5 part1",
-            "program": "${workspaceFolder:2024}/.build/debug/aoc2024",
+            "program": "${workspaceFolder:Swift}/.build/debug/aoc2024",
             "preLaunchTask": "swift: Build Debug aoc2024"
         },
         {
@@ -147,29 +147,29 @@
                 "day5",
                 "part2",
                 "--input",
-                "${workspaceFolder:2024}/problems/day5-1.txt"
+                "${workspaceFolder:Swift}/problems/day5-1.txt"
             ],
-            "cwd": "${workspaceFolder:2024}",
+            "cwd": "${workspaceFolder:Swift}",
             "name": "Debug aoc2024 day5 part2",
-            "program": "${workspaceFolder:2024}/.build/debug/aoc2024",
+            "program": "${workspaceFolder:Swift}/.build/debug/aoc2024",
             "preLaunchTask": "swift: Build Debug aoc2024"
         },
         {
             "type": "lldb",
             "request": "launch",
             "args": [],
-            "cwd": "${workspaceFolder:2024}",
+            "cwd": "${workspaceFolder:Swift}",
             "name": "Release aoc2024",
-            "program": "${workspaceFolder:2024}/.build/release/aoc2024",
+            "program": "${workspaceFolder:Swift}/.build/release/aoc2024",
             "preLaunchTask": "swift: Build Release aoc2024"
         },
         {
             "type": "lldb",
             "request": "launch",
             "args": [],
-            "cwd": "${workspaceFolder:2024}",
+            "cwd": "${workspaceFolder:Swift}",
             "name": "Debug aoc2024",
-            "program": "${workspaceFolder:2024}/.build/debug/aoc2024",
+            "program": "${workspaceFolder:Swift}/.build/debug/aoc2024",
             "preLaunchTask": "swift: Build Debug aoc2024"
         }
     ]
