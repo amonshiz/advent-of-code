@@ -143,6 +143,20 @@
         {
             "type": "lldb",
             "request": "launch",
+            "args": [
+                "day5",
+                "part2",
+                "--input",
+                "${workspaceFolder:2024}/problems/day5-1.txt"
+            ],
+            "cwd": "${workspaceFolder:2024}",
+            "name": "Debug aoc2024 day5 part2",
+            "program": "${workspaceFolder:2024}/.build/debug/aoc2024",
+            "preLaunchTask": "swift: Build Debug aoc2024"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
             "args": [],
             "cwd": "${workspaceFolder:2024}",
             "name": "Release aoc2024",
