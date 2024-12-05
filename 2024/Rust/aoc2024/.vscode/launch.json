@@ -15,12 +15,27 @@
         {
             "type": "lldb",
             "request": "launch",
-            "name": "Day 1",
+            "name": "Day 1 part 1",
             "args": [
                 "--input-file",
                 "${workspaceFolder}/../../Swift/problems/day1-1.txt",
                 "--part-number",
                 "1",
+                "day1"
+            ],
+            "cwd": "${workspaceFolder}",
+            "program": "${workspaceFolder}/target/debug/aoc2024",
+            "preLaunchTask": "rust: cargo build"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Day 1 part 2",
+            "args": [
+                "--input-file",
+                "${workspaceFolder}/../../Swift/problems/day1-1.txt",
+                "--part-number",
+                "2",
                 "day1"
             ],
             "cwd": "${workspaceFolder}",

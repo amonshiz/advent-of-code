@@ -6,6 +6,7 @@ use nom::{
 };
 use std::fs::read_to_string;
 use std::io;
+use std::collections::HashMap;
 
 #[derive(Debug, PartialEq)]
 pub struct IDPair {
@@ -23,13 +24,6 @@ fn parse_id_pairs(input: &str) -> IResult<&str, Vec<IDPair>> {
 }
 
 pub fn handle(input_file: std::path::PathBuf, part_number: u8) -> Result<(), io::Error> {
-    match part_number {
-        1 => part_1(input_file),
-        _ => Err(io::Error::new(io::ErrorKind::InvalidInput, "Invalid part number")),
-    }
-}
-
-pub fn part_1(input_file: std::path::PathBuf) -> Result<(), io::Error> {
     let contents = read_to_string(input_file)?;
 
     let id_pairs = parse_id_pairs(&contents);
@@ -39,6 +33,15 @@ pub fn part_1(input_file: std::path::PathBuf) -> Result<(), io::Error> {
         left_ids.push(id_pair.first);
         right_ids.push(id_pair.second);
     }
+
+    match part_number {
+        1 => part_1(&mut left_ids, &mut right_ids),
+        2 => part_2(left_ids, right_ids),
+        _ => Err(io::Error::new(io::ErrorKind::InvalidInput, "Invalid part number")),
+    }
+}
+
+pub fn part_1(left_ids: &mut Vec<u32>, right_ids: &mut Vec<u32>) -> Result<(), io::Error> {
     left_ids.sort();
     right_ids.sort();
     let mut diff: u32 = 0;
@@ -46,5 +49,21 @@ pub fn part_1(input_file: std::path::PathBuf) -> Result<(), io::Error> {
         diff += (left_ids[i] as i32 - right_ids[i] as i32).abs() as u32;
     }
     println!("{}", diff);
+    Ok(())
+}
+
+pub fn part_2(left_ids: Vec<u32>, right_ids: Vec<u32>) -> Result<(), io::Error> {
+    let mut right_counts: HashMap<u32, u32> = HashMap::new();
+    for right_id in right_ids {
+        *right_counts.entry(right_id).or_insert(0) += 1;
+    }
+
+    let mut count_result: u32 = 0;
+    for left_id in left_ids {
+        if right_counts.contains_key(&left_id) {
+            count_result = count_result + (left_id * right_counts[&left_id]);
+        }
+    }
+    println!("{}", count_result);
     Ok(())
 }
