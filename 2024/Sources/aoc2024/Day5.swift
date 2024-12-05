@@ -4,13 +4,17 @@ import Parsing
 
 extension Day5.Update {
     /*
-    The idea is:
-    - create two sets of pages for each update, one that is "has seen" and one that is "not seen" where "has seen" is defined as a page that has been checked already
-    - for each page in the update `pages` array, remove that page from the "not seen" set and add it to the "has seen" set.
-    - for the current page get all rules that require the current page to come first
-    - check that none of the pages in the selected rules appear in the "has seen" set but do appear in the "not seen" set (or are not present at all)
-    - if there is a page that is required to come after the current page in the "has seen" set then this is an invalid update
-    */
+     The idea is:
+     - create two sets of pages for each update, one that is "has seen" and one that is "not seen" where "has seen" is
+         defined as a page that has been checked already
+     - for each page in the update `pages` array, remove that page from the "not seen" set and add it to the "has seen"
+         set.
+     - for the current page get all rules that require the current page to come first
+     - check that none of the pages in the selected rules appear in the "has seen" set but do appear in the "not seen"
+         set (or are not present at all)
+     - if there is a page that is required to come after the current page in the "has seen" set then this is an invalid
+         update
+     */
     func isValid(given rulesLookup: [Int: [Int]], verbose: Bool = false) -> Bool {
         var hasSeen: Set<Int> = []
         var notSeen: Set<Int> = Set(pages)
@@ -22,16 +26,15 @@ extension Day5.Update {
             hasSeen.insert(page)
             notSeen.remove(page)
 
-            for mustFollowPage in rulesLookup[page, default: []] {
-                if hasSeen.contains(mustFollowPage) {
-                    if verbose {
-                        print("Invalid update: page \(mustFollowPage) must follow page \(page) in update \(pages)")
-                    }
-                    isValid = false
-                    break pageLoop
+            for mustFollowPage in rulesLookup[page, default: []] where hasSeen.contains(mustFollowPage) {
+                if verbose {
+                    print("Invalid update: page \(mustFollowPage) must follow page \(page) in update \(pages)")
                 }
+                isValid = false
+                break pageLoop
             }
         }
+
         return isValid
     }
 }
