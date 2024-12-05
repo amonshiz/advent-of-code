@@ -6,3 +6,10 @@ DerivedData/
 .swiftpm/configuration/registries.json
 .swiftpm/xcode/package.xcworkspace/contents.xcworkspacedata
 .netrc
+
+# Common rust ignores
+target/
+**/*.rs.bk
+**/*.rlib
+**/*.d
+
