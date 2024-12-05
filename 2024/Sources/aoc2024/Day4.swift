@@ -10,17 +10,6 @@ struct Day4: ParsableCommand {
         ]
     )
 
-    struct Options: ParsableArguments {
-        @Option(help: "Input file", transform: URL.init(fileURLWithPath:))
-        var input: URL
-
-        func validate() throws {
-            guard FileManager.default.fileExists(atPath: input.path()) else {
-                throw ValidationError("Input file does not exist")
-            }
-        }
-    }
-
     enum Direction: CaseIterable {
         case left
         case right
@@ -85,7 +74,7 @@ struct Day4: ParsableCommand {
         )
 
         @OptionGroup()
-        var options: Options
+        var options: CommonOptions
 
         func xmases(beginning characterIndex: Int, within lineIndex: Int, in lines: [[Character]]) -> Int {
             let line = lines[lineIndex]
@@ -142,7 +131,7 @@ struct Day4: ParsableCommand {
         )
 
         @OptionGroup()
-        var options: Options
+        var options: CommonOptions
 
         func x_mases(beginning characterIndex: Int, within lineIndex: Int, in lines: [[Character]]) -> Int {
             guard lines[lineIndex][characterIndex] == "A" else {

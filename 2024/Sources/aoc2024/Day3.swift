@@ -11,21 +11,6 @@ struct Day3: ParsableCommand {
         ]
     )
 
-    struct Options: ParsableArguments {
-        @Option(
-            name: [.customLong("input")],
-            help: "Path to the input file",
-            transform: URL.init(fileURLWithPath:)
-        )
-        var input: URL
-
-        func validate() throws {
-            guard FileManager.default.fileExists(atPath: input.path()) else {
-                throw ValidationError("File does not exist at \(input.path())")
-            }
-        }
-    }
-
     // swiftlint:disable type_name
     enum Op {
         case mul(MulOperation)
@@ -105,7 +90,7 @@ struct Day3: ParsableCommand {
             abstract: "Day 3 - Part 1 solution"
         )
 
-        @OptionGroup var options: Options
+        @OptionGroup var options: CommonOptions
 
         struct SkipToMulParser: Parser {
             var body: some Parser<Substring, String> {
@@ -151,7 +136,7 @@ struct Day3: ParsableCommand {
             abstract: "Day 3 - Part 2 solution"
         )
 
-        @OptionGroup var options: Options
+        @OptionGroup var options: CommonOptions
 
         mutating func run() throws {
             let input = try String(contentsOf: options.input, encoding: .utf8)

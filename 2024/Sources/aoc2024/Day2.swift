@@ -79,21 +79,12 @@ struct Day2: ParsableCommand {
         }
     }
 
-    struct Options: ParsableArguments {
-        @Option(
-            name: [.customLong("input")],
-            help: "Path to the input file",
-            transform: URL.init(fileURLWithPath:)
-        )
-        var input: URL
-    }
-
     struct Part1: ParsableCommand {
         static let configuration = CommandConfiguration(
             abstract: "Day 2 - Part 1 solution"
         )
 
-        @OptionGroup var options: Options
+        @OptionGroup var options: CommonOptions
 
         func run() throws {
             let input = try String(contentsOf: options.input, encoding: .utf8)
@@ -108,7 +99,7 @@ struct Day2: ParsableCommand {
             abstract: "Day 2 - Part 2 solution"
         )
 
-        @OptionGroup var options: Options
+        @OptionGroup var options: CommonOptions
 
         func run() throws {
             let input = try String(contentsOf: options.input, encoding: .utf8)

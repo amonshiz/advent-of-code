@@ -3,15 +3,6 @@ import Foundation
 import Parsing
 
 struct Day1: ParsableCommand {
-    struct Options: ParsableArguments {
-        @Option(
-            name: [.short, .customLong("input")],
-            help: "Path to the input file",
-            transform: URL.init(fileURLWithPath:)
-        )
-        var inputPath: URL
-    }
-
     struct IDPair {
         let leftID: Int
         let rightID: Int
@@ -52,16 +43,10 @@ struct Day1: ParsableCommand {
             abstract: "Day 1 - Part 1 solution"
         )
 
-        @OptionGroup var options: Options
-
-        func validate() throws {
-            guard FileManager.default.fileExists(atPath: options.inputPath.path()) else {
-                throw ValidationError("File does not exist at \(options.inputPath.path())")
-            }
-        }
+        @OptionGroup var options: CommonOptions
 
         func run() throws {
-            let pairsContent = try String(contentsOf: options.inputPath, encoding: .utf8)
+            let pairsContent = try String(contentsOf: options.input, encoding: .utf8)
             let pairs = try IDPairsParser().parse(pairsContent)
             let (left, right) = pairs.reduce(into: ([Int](), [Int]())) { acc, next in
                 acc.0.append(next.leftID)
@@ -82,16 +67,10 @@ struct Day1: ParsableCommand {
             abstract: "Day 1 - Part 2 solution"
         )
 
-        @OptionGroup var options: Options
-
-        func validate() throws {
-            guard FileManager.default.fileExists(atPath: options.inputPath.path()) else {
-                throw ValidationError("File does not exist at \(options.inputPath.path())")
-            }
-        }
+        @OptionGroup var options: CommonOptions
 
         func run() throws {
-            let pairsContent = try String(contentsOf: options.inputPath, encoding: .utf8)
+            let pairsContent = try String(contentsOf: options.input, encoding: .utf8)
             let pairs = try IDPairsParser().parse(pairsContent)
             let (left, right) = pairs.reduce(into: ([Int](), [Int]())) { acc, next in
                 acc.0.append(next.leftID)
