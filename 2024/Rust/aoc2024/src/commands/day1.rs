@@ -50,7 +50,7 @@ pub fn handle(input_file: std::path::PathBuf, part_number: u8) -> Result<(), io:
     }
 }
 
-pub fn part_1(left_ids: &mut Vec<u32>, right_ids: &mut Vec<u32>) -> Result<(), io::Error> {
+pub fn part_1(left_ids: &mut [u32], right_ids: &mut [u32]) -> Result<(), io::Error> {
     left_ids.sort();
     right_ids.sort();
     let mut diff: u32 = 0;

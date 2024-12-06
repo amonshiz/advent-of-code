@@ -1,11 +1,11 @@
 use nom::{
     character::complete::{digit1, newline, space1},
-    multi::separated_list1,
     combinator::map_res,
+    multi::separated_list1,
     IResult,
 };
-use std::{fs::read_to_string, iter::zip};
 use std::io;
+use std::{fs::read_to_string, iter::zip};
 
 #[derive(Debug, PartialEq)]
 pub struct Report {
@@ -31,7 +31,10 @@ pub fn handle(input_file: std::path::PathBuf, part_number: u8) -> Result<(), io:
     match part_number {
         1 => part_1(&contents),
         2 => part_2(&contents),
-        _ => Err(io::Error::new(io::ErrorKind::InvalidInput, "Invalid part number")),
+        _ => Err(io::Error::new(
+            io::ErrorKind::InvalidInput,
+            "Invalid part number",
+        )),
     }
 }
 
@@ -59,7 +62,7 @@ impl LevelsValidation for Report {
 
         for (current, next) in zip(to_check, &to_check[1..]) {
             let diff = next - current;
-            if diff < 1 || diff > 3 {
+            if !(1..=3).contains(&diff) {
                 return false;
             }
         }
@@ -79,7 +82,9 @@ impl LevelsValidation for Report {
         for i in 0..self.levels.len() {
             let mut test_levels = self.levels.clone();
             test_levels.remove(i);
-            let report = Report { levels: test_levels };
+            let report = Report {
+                levels: test_levels,
+            };
             if report.levels_are_valid() {
                 return true;
             }
@@ -98,7 +103,10 @@ pub fn part_1(input: &str) -> Result<(), io::Error> {
 
 pub fn part_2(input: &str) -> Result<(), io::Error> {
     let (_, reports) = parse_reports(input).unwrap();
-    let valid_count = reports.iter().filter(|r| r.problem_dampened_is_valid()).count();
+    let valid_count = reports
+        .iter()
+        .filter(|r| r.problem_dampened_is_valid())
+        .count();
     println!("{}", valid_count);
     Ok(())
 }
