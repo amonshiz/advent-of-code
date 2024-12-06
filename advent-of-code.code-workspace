@@ -1,0 +1,16 @@
+{
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"name": "Rust",
+			"path": "2024/Rust/aoc2024"
+		},
+		{
+			"name": "Swift",
+			"path": "2024/Swift"
+		}
+	],
+	"settings": {}
+}
