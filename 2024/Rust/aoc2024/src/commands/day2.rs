@@ -30,12 +30,14 @@ pub fn handle(input_file: std::path::PathBuf, part_number: u8) -> Result<(), io:
     let contents = read_to_string(input_file)?;
     match part_number {
         1 => part_1(&contents),
+        2 => part_2(&contents),
         _ => Err(io::Error::new(io::ErrorKind::InvalidInput, "Invalid part number")),
     }
 }
 
 trait LevelsValidation {
     fn levels_are_valid(&self) -> bool;
+    fn problem_dampened_is_valid(&self) -> bool;
 }
 
 impl LevelsValidation for Report {
@@ -64,11 +66,39 @@ impl LevelsValidation for Report {
 
         true
     }
+
+    fn problem_dampened_is_valid(&self) -> bool {
+        if self.levels.len() < 2 {
+            return true;
+        }
+
+        if self.levels_are_valid() {
+            return true;
+        }
+
+        for i in 0..self.levels.len() {
+            let mut test_levels = self.levels.clone();
+            test_levels.remove(i);
+            let report = Report { levels: test_levels };
+            if report.levels_are_valid() {
+                return true;
+            }
+        }
+
+        false
+    }
 }
 
 pub fn part_1(input: &str) -> Result<(), io::Error> {
     let (_, reports) = parse_reports(input).unwrap();
     let valid_count = reports.iter().filter(|r| r.levels_are_valid()).count();
+    println!("{}", valid_count);
+    Ok(())
+}
+
+pub fn part_2(input: &str) -> Result<(), io::Error> {
+    let (_, reports) = parse_reports(input).unwrap();
+    let valid_count = reports.iter().filter(|r| r.problem_dampened_is_valid()).count();
     println!("{}", valid_count);
     Ok(())
 }
