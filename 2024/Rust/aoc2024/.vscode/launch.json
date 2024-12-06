@@ -18,7 +18,7 @@
             "name": "Day 1 part 1",
             "args": [
                 "--input-file",
-                "${workspaceFolder}/../../Swift/problems/day1-1.txt",
+                "${workspaceFolder:problems}/day1-1.txt",
                 "--part-number",
                 "1",
                 "day1"
@@ -33,7 +33,7 @@
             "name": "Day 1 part 2",
             "args": [
                 "--input-file",
-                "${workspaceFolder}/../../Swift/problems/day1-1.txt",
+                "${workspaceFolder:problems}/day1-1.txt",
                 "--part-number",
                 "2",
                 "day1"
@@ -48,7 +48,7 @@
             "name": "Day 2 part 1",
             "args": [
                 "--input-file",
-                "${workspaceFolder}/../../Swift/problems/day2-1.txt",
+                "${workspaceFolder:problems}/day2-1.txt",
                 "--part-number",
                 "1",
                 "day2"
@@ -63,7 +63,7 @@
             "name": "Day 2 part 2",
             "args": [
                 "--input-file",
-                "${workspaceFolder}/../../Swift/problems/day2-1.txt",
+                "${workspaceFolder:problems}/day2-1.txt",
                 "--part-number",
                 "2",
                 "day2"
@@ -78,7 +78,7 @@
             "name": "Day 3 part 1",
             "args": [
                 "--input-file",
-                "${workspaceFolder}/../../Swift/problems/day3-1.txt",
+                "${workspaceFolder:problems}/day3-1.txt",
                 "--part-number",
                 "1",
                 "day3"
@@ -93,7 +93,7 @@
             "name": "Day 3 part 2",
             "args": [
                 "--input-file",
-                "${workspaceFolder}/../../Swift/problems/day3-1.txt",
+                "${workspaceFolder:problems}/day3-1.txt",
                 "--part-number",
                 "2",
                 "day3"

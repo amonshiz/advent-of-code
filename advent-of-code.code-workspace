@@ -10,6 +10,9 @@
 		{
 			"name": "Swift",
 			"path": "2024/Swift"
+		},
+		{
+			"path": "2024/problems"
 		}
 	],
 	"settings": {}
