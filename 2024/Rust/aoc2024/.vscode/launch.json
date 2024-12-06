@@ -41,6 +41,21 @@
             "cwd": "${workspaceFolder}",
             "program": "${workspaceFolder}/target/debug/aoc2024",
             "preLaunchTask": "rust: cargo build"
-        }
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Day 2 part 1",
+            "args": [
+                "--input-file",
+                "${workspaceFolder}/../../Swift/problems/day2-1.txt",
+                "--part-number",
+                "1",
+                "day2"
+            ],
+            "cwd": "${workspaceFolder}",
+            "program": "${workspaceFolder}/target/debug/aoc2024",
+            "preLaunchTask": "rust: cargo build"
+        },
     ]
 }

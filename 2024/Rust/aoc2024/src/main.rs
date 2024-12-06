@@ -10,5 +10,6 @@ fn main() -> Result<(), io::Error> {
 
     match args.command {
         args::Commands::Day1 => commands::day1::handle(args.input_file, args.part_number),
+        args::Commands::Day2 => commands::day2::handle(args.input_file, args.part_number),
     }
 }
