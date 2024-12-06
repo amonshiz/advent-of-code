@@ -1,13 +1,16 @@
-use std::io;
-use std::fs::read_to_string;
 use regex::Regex;
+use std::fs::read_to_string;
+use std::io;
 
 pub fn handle(input_file: std::path::PathBuf, part_number: u8) -> Result<(), io::Error> {
     let contents = read_to_string(input_file)?;
     match part_number {
         1 => part1(&contents),
         2 => part2(&contents),
-        _ => Err(io::Error::new(io::ErrorKind::InvalidInput, "Invalid part number")),
+        _ => Err(io::Error::new(
+            io::ErrorKind::InvalidInput,
+            "Invalid part number",
+        )),
     }
 }
 
@@ -36,31 +39,23 @@ fn part2(input: &str) -> Result<(), io::Error> {
     let mut sum: i32 = 0;
     let mut is_enabled: bool = true;
     for mat in result {
-        match mat.name("mul") {
-            Some(_mul) => {
-                if !is_enabled {
-                    continue;
-                }
+        if let Some(_mul) = mat.name("mul") {
+            if !is_enabled {
+                continue;
+            }
 
-                sum += mat.name("f").unwrap().as_str().parse::<i32>().unwrap() * mat.name("s").unwrap().as_str().parse::<i32>().unwrap();
-            }
-            _ => {}
+            sum += mat.name("f").unwrap().as_str().parse::<i32>().unwrap()
+                * mat.name("s").unwrap().as_str().parse::<i32>().unwrap();
         }
-        match mat.name("do") {
-            Some(do_match) => {
-                if do_match.as_str() == "do()" {
-                    is_enabled = true;
-                }
+        if let Some(do_match) = mat.name("do") {
+            if do_match.as_str() == "do()" {
+                is_enabled = true;
             }
-            _ => {}
         }
-        match mat.name("dont") {
-            Some(dont_match) => {
-                if dont_match.as_str() == "don't()" {
-                    is_enabled = false;
-                }
+        if let Some(dont_match) = mat.name("dont") {
+            if dont_match.as_str() == "don't()" {
+                is_enabled = false;
             }
-            _ => {}
         }
     }
 
