@@ -153,7 +153,8 @@
             "name": "Day5 part2",
             "program": "${workspaceFolder:Swift}/.build/debug/aoc2024",
             "preLaunchTask": "swift: Build Debug aoc2024"
-        },{
+        },
+        {
             "type": "lldb",
             "request": "launch",
             "args": [
@@ -164,6 +165,20 @@
             ],
             "cwd": "${workspaceFolder:Swift}",
             "name": "Day6 part1",
+            "program": "${workspaceFolder:Swift}/.build/debug/aoc2024",
+            "preLaunchTask": "swift: Build Debug aoc2024"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "args": [
+                "day6",
+                "part2",
+                "--input",
+                "${workspaceFolder:Swift}/problems/day6-1.txt"
+            ],
+            "cwd": "${workspaceFolder:Swift}",
+            "name": "Day6 part2",
             "program": "${workspaceFolder:Swift}/.build/debug/aoc2024",
             "preLaunchTask": "swift: Build Debug aoc2024"
         },
