@@ -1,12 +1,14 @@
 use std::io;
 use std::fs::read_to_string;
 use std::collections::HashSet;
+use std::collections::HashMap;
 use std::iter::Extend;
 
 pub fn handle(input_file: std::path::PathBuf, part_number: u8) -> Result<(), io::Error> {
     let contents = read_to_string(input_file)?;
     match part_number {
         1 => part_1(&contents),
+        2 => part_2(&contents),
         _ => Err(io::Error::new(io::ErrorKind::InvalidInput, "Invalid part number")),
     }
 }
@@ -28,6 +30,7 @@ impl Position {
     }
 }
 
+#[derive(PartialEq, Eq, Hash, Clone)]
 enum GuardDirection {
     Up,
     Down,
@@ -53,6 +56,7 @@ enum MovementEnd {
 
 struct Map {
     locations: Vec<Vec<char>>,
+    guard_start_position: Position,
     guard_position: Option<Position>,
     direction: GuardDirection,
 }
@@ -75,6 +79,7 @@ impl Map {
                     let guard_start_position = Position { x: x as i32, y: y as i32 };
                     return Map {
                         locations: filtered_locations,
+                        guard_start_position,
                         guard_position: Some(guard_start_position),
                         direction: GuardDirection::Up,
                     };
@@ -83,6 +88,16 @@ impl Map {
             }
         }
         panic!("No guard start position found");
+    }
+
+    fn updated_with_obstruction(original: &Map, position: Position) -> Option<Map> {
+        if original.guard_start_position == position {
+            return None;
+        }
+
+        let mut new_locations = original.locations.clone();
+        new_locations[position.y as usize][position.x as usize] = '#';
+        Some(Map::new_from_locations(new_locations))
     }
 }
 
@@ -130,6 +145,31 @@ impl Map {
         }
         movement
     }
+
+    fn path_contains_loop(&mut self) -> bool {
+        let mut directions_at_obstructions: HashMap<Position, HashSet<GuardDirection>> = HashMap::new();
+        'check_loop: loop {
+            let movement = self.move_guard();
+            match movement {
+                MovementEnd::OnBoard(positions) => {
+                    if let Some(last_position) = positions.last() {
+                        let next_position = last_position.next(&self.direction);
+                        let directions = directions_at_obstructions
+                            .entry(next_position)
+                            .or_insert_with(HashSet::new);
+                        if directions.contains(&self.direction) {
+                            return true;
+                        }
+                        directions.insert(self.direction.clone());
+                    }
+                }
+                MovementEnd::OffBoard(_) => {
+                    break 'check_loop;
+                }
+            }
+        }
+        false
+    }
 }
 
 fn part_1(contents: &str) -> Result<(), io::Error> {
@@ -150,5 +190,35 @@ fn part_1(contents: &str) -> Result<(), io::Error> {
         }
     }
     println!("{:?}", visited_positions.len());
+    Ok(())
+}
+
+fn part_2(contents: &str) -> Result<(), io::Error> {
+    let mut map = Map::new(contents);
+    let mut visited_positions: HashSet<Position> = HashSet::new();
+    loop {
+        let movement = map.move_guard();
+        match movement {
+            MovementEnd::OnBoard(positions) => {
+                visited_positions.extend(positions.clone());
+                // println!("on board {:?}", positions);
+            }
+            MovementEnd::OffBoard(positions) => {
+                visited_positions.extend(positions.clone());
+                // println!("off board {:?}", positions);
+                break;
+            }
+        }
+    }
+
+    let mut count_of_obstructions = 0;
+    for position in visited_positions {
+        if let Some(mut updated_map) = Map::updated_with_obstruction(&map, position) {
+            if updated_map.path_contains_loop() {
+                count_of_obstructions += 1;
+            }
+        }
+    }
+    println!("{:?}", count_of_obstructions);
     Ok(())
 }
