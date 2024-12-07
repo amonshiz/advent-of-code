@@ -15,5 +15,6 @@ fn main() -> Result<(), io::Error> {
         args::Commands::Day4 => commands::day4::handle(args.input_file, args.part_number),
         args::Commands::Day5 => commands::day5::handle(args.input_file, args.part_number),
         args::Commands::Day6 => commands::day6::handle(args.input_file, args.part_number),
+        args::Commands::Day7 => commands::day7::handle(args.input_file, args.part_number),
     }
 }
