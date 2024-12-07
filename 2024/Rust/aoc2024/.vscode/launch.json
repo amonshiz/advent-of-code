@@ -162,5 +162,23 @@
             "program": "${workspaceFolder:Rust}/target/debug/aoc2024",
             "preLaunchTask": "rust: cargo build"
         },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Day 6 part 1",
+            "args": [
+                "--input-file",
+                "${workspaceFolder:problems}/day6-1.txt",
+                "--part-number",
+                "1",
+                "day6"
+            ],
+            "env": {
+                "RUST_BACKTRACE": "1"
+            },
+            "cwd": "${workspaceFolder:Rust}",
+            "program": "${workspaceFolder:Rust}/target/debug/aoc2024",
+            "preLaunchTask": "rust: cargo build"
+        },
     ]
 }
