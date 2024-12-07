@@ -1,16 +1,16 @@
 // use std::collections:HashMap;
 use nom::{
-    character::complete::{digit1, newline},
     bytes::complete::tag,
+    character::complete::{digit1, newline},
     combinator::map_res,
     multi::separated_list1,
     sequence::separated_pair,
     IResult,
 };
-use std::io;
-use std::fs::read_to_string;
-use std::collections::{HashMap, HashSet};
 use std::cmp::Ordering;
+use std::collections::{HashMap, HashSet};
+use std::fs::read_to_string;
+use std::io;
 
 #[derive(Debug, PartialEq)]
 pub struct Rule {
@@ -72,7 +72,10 @@ pub fn handle(input_file: std::path::PathBuf, part_number: u8) -> Result<(), io:
     match part_number {
         1 => part1(input_file),
         2 => part2(input_file),
-        _ => Err(io::Error::new(io::ErrorKind::InvalidInput, "Invalid part number")),
+        _ => Err(io::Error::new(
+            io::ErrorKind::InvalidInput,
+            "Invalid part number",
+        )),
     }
 }
 
@@ -84,7 +87,7 @@ fn part1(input_file: std::path::PathBuf) -> Result<(), io::Error> {
 
     let mut rule_map: HashMap<u32, HashSet<u32>> = HashMap::new();
     for rule in rules {
-        rule_map.entry(rule.first).or_insert(HashSet::new()).insert(rule.second);
+        rule_map.entry(rule.first).or_default().insert(rule.second);
     }
 
     let mut middle_value_sum = 0;
@@ -106,7 +109,7 @@ fn part2(input_file: std::path::PathBuf) -> Result<(), io::Error> {
 
     let mut rule_map: HashMap<u32, HashSet<u32>> = HashMap::new();
     for rule in rules {
-        rule_map.entry(rule.first).or_insert(HashSet::new()).insert(rule.second);
+        rule_map.entry(rule.first).or_default().insert(rule.second);
     }
 
     let invalid_updates = updates.iter().filter(|update| !update.is_valid(&rule_map));
@@ -135,7 +138,10 @@ fn part2(input_file: std::path::PathBuf) -> Result<(), io::Error> {
         }
     }
 
-    let middle_value_sum: u32 = corrected_updates.iter().map(|update| update.pages[update.pages.len() / 2]).sum();
+    let middle_value_sum: u32 = corrected_updates
+        .iter()
+        .map(|update| update.pages[update.pages.len() / 2])
+        .sum();
     println!("Middle value sum: {}", middle_value_sum);
     Ok(())
 }
