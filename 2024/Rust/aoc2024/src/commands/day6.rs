@@ -1,7 +1,7 @@
-use std::io;
-use std::fs::read_to_string;
-use std::collections::HashSet;
 use std::collections::HashMap;
+use std::collections::HashSet;
+use std::fs::read_to_string;
+use std::io;
 use std::iter::Extend;
 
 pub fn handle(input_file: std::path::PathBuf, part_number: u8) -> Result<(), io::Error> {
@@ -9,7 +9,10 @@ pub fn handle(input_file: std::path::PathBuf, part_number: u8) -> Result<(), io:
     match part_number {
         1 => part_1(&contents),
         2 => part_2(&contents),
-        _ => Err(io::Error::new(io::ErrorKind::InvalidInput, "Invalid part number")),
+        _ => Err(io::Error::new(
+            io::ErrorKind::InvalidInput,
+            "Invalid part number",
+        )),
     }
 }
 
@@ -22,10 +25,22 @@ struct Position {
 impl Position {
     fn next(&self, direction: &GuardDirection) -> Position {
         match direction {
-            GuardDirection::Up => Position { x: self.x, y: self.y - 1 },
-            GuardDirection::Down => Position { x: self.x, y: self.y + 1 },
-            GuardDirection::Left => Position { x: self.x - 1, y: self.y },
-            GuardDirection::Right => Position { x: self.x + 1, y: self.y },
+            GuardDirection::Up => Position {
+                x: self.x,
+                y: self.y - 1,
+            },
+            GuardDirection::Down => Position {
+                x: self.x,
+                y: self.y + 1,
+            },
+            GuardDirection::Left => Position {
+                x: self.x - 1,
+                y: self.y,
+            },
+            GuardDirection::Right => Position {
+                x: self.x + 1,
+                y: self.y,
+            },
         }
     }
 }
@@ -63,7 +78,10 @@ struct Map {
 
 impl Map {
     fn new(contents: &str) -> Map {
-        let locations = contents.split("\n").map(|line| line.chars().collect()).collect();
+        let locations = contents
+            .split("\n")
+            .map(|line| line.chars().collect())
+            .collect();
         Map::new_from_locations(locations)
     }
 
@@ -74,17 +92,17 @@ impl Map {
             .filter(|line| !line.is_empty())
             .collect();
         for (y, line) in filtered_locations.iter().enumerate() {
-            match line.iter().position(|&c| c == '^') {
-                Some(x) => {
-                    let guard_start_position = Position { x: x as i32, y: y as i32 };
-                    return Map {
-                        locations: filtered_locations,
-                        guard_start_position,
-                        guard_position: Some(guard_start_position),
-                        direction: GuardDirection::Up,
-                    };
-                }
-                None => {}
+            if let Some(x) = line.iter().position(|&c| c == '^') {
+                let guard_start_position = Position {
+                    x: x as i32,
+                    y: y as i32,
+                };
+                return Map {
+                    locations: filtered_locations,
+                    guard_start_position,
+                    guard_position: Some(guard_start_position),
+                    direction: GuardDirection::Up,
+                };
             }
         }
         panic!("No guard start position found");
@@ -109,7 +127,10 @@ impl Map {
 
     fn is_on_board(&self, position: &Position) -> bool {
         // println!("pos {:?} bounds {:?} {:?}", position, self.locations[0].len(), self.locations.len());
-        position.x >= 0 && position.x < self.locations[0].len() as i32 && position.y >= 0 && position.y < self.locations.len() as i32
+        position.x >= 0
+            && position.x < self.locations[0].len() as i32
+            && position.y >= 0
+            && position.y < self.locations.len() as i32
     }
 
     fn guard_positions(&self, direction: &GuardDirection) -> MovementEnd {
@@ -117,10 +138,10 @@ impl Map {
 
         match &self.guard_position {
             Some(guard_position) => {
-                let mut next_position = guard_position.clone();
+                let mut next_position = *guard_position;
                 while self.is_on_board(&next_position) && self.character_at(&next_position) != '#' {
-                    positions.push(next_position.clone());
-                    next_position = next_position.next(&direction);
+                    positions.push(next_position);
+                    next_position = next_position.next(direction);
                 }
                 if self.is_on_board(&next_position) {
                     MovementEnd::OnBoard(positions)
@@ -136,7 +157,7 @@ impl Map {
         let movement = self.guard_positions(&self.direction);
         match &movement {
             MovementEnd::OnBoard(positions) => {
-                self.guard_position = Some(positions.last().unwrap().clone());
+                self.guard_position = Some(*positions.last().unwrap());
                 self.direction = self.direction.next();
             }
             MovementEnd::OffBoard(_) => {
@@ -147,7 +168,8 @@ impl Map {
     }
 
     fn path_contains_loop(&mut self) -> bool {
-        let mut directions_at_obstructions: HashMap<Position, HashSet<GuardDirection>> = HashMap::new();
+        let mut directions_at_obstructions: HashMap<Position, HashSet<GuardDirection>> =
+            HashMap::new();
         'check_loop: loop {
             let movement = self.move_guard();
             match movement {
@@ -156,7 +178,7 @@ impl Map {
                         let next_position = last_position.next(&self.direction);
                         let directions = directions_at_obstructions
                             .entry(next_position)
-                            .or_insert_with(HashSet::new);
+                            .or_default();
                         if directions.contains(&self.direction) {
                             return true;
                         }
