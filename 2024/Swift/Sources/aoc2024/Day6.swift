@@ -107,8 +107,7 @@ struct Day6: ParsableCommand {
 
             var currentPosition = guardPosition
             while isOnBoard(position: currentPosition),
-                  character(at: currentPosition) != "#"
-            {
+                  character(at: currentPosition) != "#" {
                 positions.append(currentPosition)
                 let nextPosition = currentPosition.next(in: direction)
                 currentPosition = nextPosition

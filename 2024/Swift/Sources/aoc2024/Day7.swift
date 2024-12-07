@@ -74,7 +74,7 @@ struct Day7: ParsableCommand {
         case add
         case multiply
         case concatenation
-    
+
         func apply(first: Int, second: Int) -> Int {
             switch self {
             case .add:
