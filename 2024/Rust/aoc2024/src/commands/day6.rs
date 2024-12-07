@@ -176,9 +176,8 @@ impl Map {
                 MovementEnd::OnBoard(positions) => {
                     if let Some(last_position) = positions.last() {
                         let next_position = last_position.next(&self.direction);
-                        let directions = directions_at_obstructions
-                            .entry(next_position)
-                            .or_default();
+                        let directions =
+                            directions_at_obstructions.entry(next_position).or_default();
                         if directions.contains(&self.direction) {
                             return true;
                         }
