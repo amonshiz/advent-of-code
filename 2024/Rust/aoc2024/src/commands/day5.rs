@@ -10,6 +10,7 @@ use nom::{
 use std::io;
 use std::fs::read_to_string;
 use std::collections::{HashMap, HashSet};
+use std::cmp::Ordering;
 
 #[derive(Debug, PartialEq)]
 pub struct Rule {
@@ -20,6 +21,21 @@ pub struct Rule {
 #[derive(Debug, PartialEq, Clone)]
 pub struct Update {
     pub pages: Vec<u32>,
+}
+
+impl Update {
+    fn is_valid(&self, rules: &HashMap<u32, HashSet<u32>>) -> bool {
+        let mut seen_pages: HashSet<u32> = HashSet::new();
+        for page in self.pages.clone() {
+            if let Some(required_pages_after) = rules.get(&page) {
+                if !required_pages_after.is_disjoint(&seen_pages) {
+                    return false;
+                }
+            }
+            seen_pages.insert(page);
+        }
+        true
+    }
 }
 
 fn str_to_u32(input: &str) -> IResult<&str, u32> {
@@ -55,6 +71,7 @@ pub fn handle(input_file: std::path::PathBuf, part_number: u8) -> Result<(), io:
     println!("Day 5");
     match part_number {
         1 => part1(input_file),
+        2 => part2(input_file),
         _ => Err(io::Error::new(io::ErrorKind::InvalidInput, "Invalid part number")),
     }
 }
@@ -72,19 +89,53 @@ fn part1(input_file: std::path::PathBuf) -> Result<(), io::Error> {
 
     let mut middle_value_sum = 0;
     'update_loop: for update in updates {
-        let mut seen_pages: HashSet<u32> = HashSet::new();
-        let update_copy = update.clone();
-        for page in update_copy.pages {
-            if let Some(required_pages_after) = rule_map.get(&page) {
-                if !required_pages_after.is_disjoint(&seen_pages) {
-                    println!("Invalid update: {:?}", update);
-                    continue 'update_loop;
-                }
-            }
-            seen_pages.insert(page);
+        if !update.is_valid(&rule_map) {
+            println!("Invalid update: {:?}", update);
+            continue 'update_loop;
         }
+
         middle_value_sum += update.pages[update.pages.len() / 2];
     }
+    println!("Middle value sum: {}", middle_value_sum);
+    Ok(())
+}
+
+fn part2(input_file: std::path::PathBuf) -> Result<(), io::Error> {
+    let contents = read_to_string(input_file)?;
+    let (_, (rules, updates)) = parse_input(&contents).unwrap();
+
+    let mut rule_map: HashMap<u32, HashSet<u32>> = HashMap::new();
+    for rule in rules {
+        rule_map.entry(rule.first).or_insert(HashSet::new()).insert(rule.second);
+    }
+
+    let invalid_updates = updates.iter().filter(|update| !update.is_valid(&rule_map));
+    let mut corrected_updates: Vec<Update> = Vec::new();
+    for invalid_update in invalid_updates {
+        let mut other_pages = invalid_update.pages.clone();
+        other_pages.sort_by(|a, b| {
+            if let Some(first_requirements) = rule_map.get(a) {
+                // If the second number is required to come after the first, then we need to indicate that the first is "less" that the second.
+                if first_requirements.contains(b) {
+                    return Ordering::Less;
+                }
+            }
+            if let Some(second_requirements) = rule_map.get(b) {
+                // If the first number is required to come after the second, then we need to indicate that the first is "greater" than the second.
+                if second_requirements.contains(a) {
+                    return Ordering::Greater;
+                }
+            }
+            // If neither number requires the other to come first, then we can sort them naturally.
+            a.cmp(b)
+        });
+        let potential_update = Update { pages: other_pages };
+        if potential_update.is_valid(&rule_map) {
+            corrected_updates.push(potential_update);
+        }
+    }
+
+    let middle_value_sum: u32 = corrected_updates.iter().map(|update| update.pages[update.pages.len() / 2]).sum();
     println!("Middle value sum: {}", middle_value_sum);
     Ok(())
 }
