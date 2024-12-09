@@ -213,6 +213,20 @@
         {
             "type": "lldb",
             "request": "launch",
+            "args": [
+                "day8",
+                "part1",
+                "--input",
+                "${workspaceFolder:problems}/day8-1.txt"
+            ],
+            "cwd": "${workspaceFolder:Swift}",
+            "name": "Day8 part1 (sample1)",
+            "program": "${workspaceFolder:Swift}/.build/debug/aoc2024",
+            "preLaunchTask": "swift: Build Debug aoc2024"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
             "args": [],
             "cwd": "${workspaceFolder:Swift}",
             "name": "Release aoc2024",
