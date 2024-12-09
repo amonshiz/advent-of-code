@@ -10,10 +10,13 @@ struct Day8: ParsableCommand {
         ]
     )
 
+    // swiftlint:disable identifier_name
     struct Position: Hashable, Codable {
         let x: Int
         let y: Int
     }
+
+    // swiftlint:enable identifier_name
 
     struct Map: Codable {
         let frequencies: [String: [Position]]
@@ -22,8 +25,8 @@ struct Day8: ParsableCommand {
 
         init(contents: String) {
             let lines = contents.split(separator: "\n")
-            self.width = lines[0].count
-            self.height = lines.count
+            width = lines[0].count
+            height = lines.count
             var frequencies: [String: [Position]] = [:]
             for (yIndex, line) in lines.enumerated() {
                 for (xIndex, char) in line.enumerated() where char != "." {
@@ -46,8 +49,8 @@ struct Day8: ParsableCommand {
         func antinodes(for frequency: String) -> [Position] {
             let positions: [Day8.Position] = frequencies[frequency]!
             var frequencyAntinodes = [Position]()
-            for firstIndex in 0..<positions.count - 1 {
-                for secondIndex in firstIndex+1..<positions.count {
+            for firstIndex in 0 ..< positions.count - 1 {
+                for secondIndex in firstIndex + 1 ..< positions.count {
                     let antinodes = antinodes(for: positions[firstIndex], and: positions[secondIndex])
                     frequencyAntinodes.append(contentsOf: antinodes)
                 }
@@ -63,7 +66,6 @@ struct Day8: ParsableCommand {
             switch run {
             case 0:
                 fatalError("Vertical line")
-                break
             default:
                 let leftAntinode: Position
                 let rightAntinode: Position
@@ -84,7 +86,7 @@ struct Day8: ParsableCommand {
         func repeatingAntinodes() -> [String: Set<Position>] {
             var antinodes = [String: Set<Position>]()
             for frequency in frequencies.keys {
-                let frequencyAntinodes = self.repeatingAntinodes(for: frequency)
+                let frequencyAntinodes = repeatingAntinodes(for: frequency)
                 antinodes[frequency] = Set(frequencyAntinodes)
             }
             return antinodes
@@ -93,8 +95,8 @@ struct Day8: ParsableCommand {
         func repeatingAntinodes(for frequency: String) -> [Position] {
             let positions: [Day8.Position] = frequencies[frequency]!
             var frequencyAntinodes = [Position]()
-            for firstIndex in 0..<positions.count - 1 {
-                for secondIndex in firstIndex+1..<positions.count {
+            for firstIndex in 0 ..< positions.count - 1 {
+                for secondIndex in firstIndex + 1 ..< positions.count {
                     let antinodes = repeatingAntinodes(for: positions[firstIndex], and: positions[secondIndex])
                     frequencyAntinodes.append(contentsOf: antinodes)
                 }
@@ -151,7 +153,7 @@ struct Day8: ParsableCommand {
         }
 
         func printMapOfAntinodes(for frequency: String) {
-            let antinodes = self.antinodes()
+            let antinodes = antinodes()
             let antinodesForFrequency = antinodes[frequency]!
             var map = Array(repeating: Array(repeating: ".", count: width), count: height)
             for antinode in antinodesForFrequency {
