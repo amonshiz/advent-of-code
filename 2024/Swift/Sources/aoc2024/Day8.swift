@@ -4,7 +4,10 @@ import Foundation
 struct Day8: ParsableCommand {
     static let configuration = CommandConfiguration(
         abstract: "Day 8: Resonant Collinearity",
-        subcommands: [Part1.self]
+        subcommands: [
+            Part1.self,
+            Part2.self,
+        ]
     )
 
     struct Position: Hashable, Codable {
@@ -41,7 +44,7 @@ struct Day8: ParsableCommand {
         }
 
         func antinodes(for frequency: String) -> [Position] {
-            let positions = frequencies[frequency]!
+            let positions: [Day8.Position] = frequencies[frequency]!
             var frequencyAntinodes = [Position]()
             for firstIndex in 0..<positions.count - 1 {
                 for secondIndex in firstIndex+1..<positions.count {
@@ -78,6 +81,75 @@ struct Day8: ParsableCommand {
             }
         }
 
+        func repeatingAntinodes() -> [String: Set<Position>] {
+            var antinodes = [String: Set<Position>]()
+            for frequency in frequencies.keys {
+                let frequencyAntinodes = self.repeatingAntinodes(for: frequency)
+                antinodes[frequency] = Set(frequencyAntinodes)
+            }
+            return antinodes
+        }
+
+        func repeatingAntinodes(for frequency: String) -> [Position] {
+            let positions: [Day8.Position] = frequencies[frequency]!
+            var frequencyAntinodes = [Position]()
+            for firstIndex in 0..<positions.count - 1 {
+                for secondIndex in firstIndex+1..<positions.count {
+                    let antinodes = repeatingAntinodes(for: positions[firstIndex], and: positions[secondIndex])
+                    frequencyAntinodes.append(contentsOf: antinodes)
+                }
+            }
+
+            return frequencyAntinodes
+        }
+
+        func repeatingAntinodes(for first: Position, and second: Position) -> [Position] {
+            let (left, right) = first.x <= second.x ? (first, second) : (second, first)
+            let rise = abs(right.y - left.y)
+            guard rise != 0 else {
+                fatalError("Vertical line")
+            }
+
+            let run = abs(right.x - left.x)
+            var antinodes = [Position]()
+
+            if left.y > right.y {
+                var current = left
+                while current.x >= 0, current.y < height {
+                    antinodes.append(current)
+                    current = Position(x: current.x - run, y: current.y + rise)
+                }
+                current = right
+                while current.x < width, current.y >= 0 {
+                    antinodes.append(current)
+                    current = Position(x: current.x + run, y: current.y - rise)
+                }
+            } else if left.y < right.y {
+                var current = left
+                while current.x >= 0, current.y >= 0 {
+                    antinodes.append(current)
+                    current = Position(x: current.x - run, y: current.y - rise)
+                }
+                current = right
+                while current.x < width, current.y < height {
+                    antinodes.append(current)
+                    current = Position(x: current.x + run, y: current.y + rise)
+                }
+            } else {
+                var current = left
+                while current.x >= 0 {
+                    antinodes.append(current)
+                    current = Position(x: current.x - run, y: current.y)
+                }
+                current = right
+                while current.x < width {
+                    antinodes.append(current)
+                    current = Position(x: current.x + run, y: current.y)
+                }
+            }
+            return antinodes
+        }
+
         func printMapOfAntinodes(for frequency: String) {
             let antinodes = self.antinodes()
             let antinodesForFrequency = antinodes[frequency]!
@@ -99,6 +171,19 @@ struct Day8: ParsableCommand {
             let contents = try String(contentsOf: options.input, encoding: .utf8)
             let map = Map(contents: contents)
             let antinodes = map.antinodes()
+            print(antinodes.count)
+            let antinodesSet = antinodes.reduce(into: Set<Position>()) { $0.formUnion($1.value) }
+            print(antinodesSet.count)
+        }
+    }
+
+    struct Part2: ParsableCommand {
+        @OptionGroup var options: CommonOptions
+
+        mutating func run() throws {
+            let contents = try String(contentsOf: options.input, encoding: .utf8)
+            let map = Map(contents: contents)
+            let antinodes = map.repeatingAntinodes()
             print(antinodes.count)
             let antinodesSet = antinodes.reduce(into: Set<Position>()) { $0.formUnion($1.value) }
             print(antinodesSet.count)
