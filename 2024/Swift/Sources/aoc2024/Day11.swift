@@ -7,6 +7,7 @@ struct Day11: ParsableCommand {
         abstract: "Day 11",
         subcommands: [
             Part1.self,
+            Part2.self,
         ]
     )
 
@@ -68,6 +69,58 @@ struct Day11: ParsableCommand {
                 result = result.flatMap { $0.step() }
             }
             print(result.count)
+        }
+    }
+
+    struct Part2: ParsableCommand {
+        static let configuration = CommandConfiguration(
+            abstract: "Part 2"
+        )
+
+        @OptionGroup var options: CommonOptions
+
+        @Option(help: "Number of steps")
+        var numSteps: Int = 0
+
+        func run() throws {
+            let contents = try String(contentsOf: options.input, encoding: .utf8)
+            let trimmed = contents.trimmingCharacters(in: .whitespacesAndNewlines)
+            let stones = try StonesParser().parse(trimmed)
+
+            struct StepResult: Hashable {
+                let numSteps: Int
+                let count: Int
+            }
+
+            // Map of stone number && remaining steps to number of stones that will be there after those remaining steps are complted.
+            var resultCountCache = [StepResult: Int]()
+            func numberOfStonesAfterSteps(stone: Stone, currentStep: Int) -> Int {
+                let key = StepResult(numSteps: currentStep, count: stone.value)
+                if let cached = resultCountCache[key] {
+                    return cached
+                }
+
+                let nextStepStones = stone.step()
+                guard currentStep > 1 else {
+                    resultCountCache[key] = nextStepStones.count
+                    return nextStepStones.count
+                }
+
+                var count = 0
+                for stone in nextStepStones {
+                    count += numberOfStonesAfterSteps(stone: stone, currentStep: currentStep - 1)
+                }
+                resultCountCache[key] = count
+                return count
+            }
+
+            var total = 0
+            for stone in stones {
+                let value = numberOfStonesAfterSteps(stone: stone, currentStep: numSteps)
+                // print(value)
+                total += value
+            }
+            print(total)
         }
     }
 }
