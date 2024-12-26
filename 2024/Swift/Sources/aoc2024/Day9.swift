@@ -1,6 +1,7 @@
 import ArgumentParser
 import Foundation
 
+// swiftlint:disable:next type_body_length
 struct Day9: ParsableCommand {
     static let configuration = CommandConfiguration(
         abstract: "Day 9: Disk Fragmenter",
@@ -35,14 +36,16 @@ struct Day9: ParsableCommand {
             DiskEntry(kind: .blank, size: size, originalIndex: originalIndex)
         }
 
+        // swiftlint:disable line_length
         var debugDescription: String {
             switch kind {
-            case .file(index: let index):
-                return "DiskEntry(kind: file, size: \(size), index: \(index), originalIndex: \(originalIndex), consumed: \(consumed))"
+            case let .file(index: index):
+                "DiskEntry(kind: file, size: \(size), index: \(index), originalIndex: \(originalIndex), consumed: \(consumed))"
             case .blank:
-                return "DiskEntry(kind: blank, size: \(size), originalIndex: \(originalIndex), consumed: \(consumed))"
+                "DiskEntry(kind: blank, size: \(size), originalIndex: \(originalIndex), consumed: \(consumed))"
             }
         }
+        // swiftlint:enable line_length
     }
 
     struct DiskMap {
@@ -70,15 +73,15 @@ struct Day9: ParsableCommand {
             }
             self.entries = entries
 
-            totalCount = entries.reduce(0, { $0 + $1.size })
+            totalCount = entries.reduce(0) { $0 + $1.size }
         }
 
         func debugPrint() {
             var result = Array(repeating: ".", count: totalCount)
             var resultIndex = 0
             for entry in entries {
-                for writeIndex in 0..<entry.size {
-                    if case .file(index: let index) = entry.kind {
+                for writeIndex in 0 ..< entry.size {
+                    if case let .file(index: index) = entry.kind {
                         result[resultIndex + writeIndex] = "\(index)"
                     }
                 }
@@ -89,7 +92,7 @@ struct Day9: ParsableCommand {
 
         private mutating func defrag(operation: (DiskEntry) -> Void) {
             var tailFileIndex = indexOfFileAtOrBefore(index: entries.count - 1)
-            entryLoop: for entryIndex in 0..<entries.count {
+            entryLoop: for entryIndex in 0 ..< entries.count {
                 var entry = entries[entryIndex]
                 switch entry.kind {
                 case .file:
@@ -99,17 +102,17 @@ struct Day9: ParsableCommand {
                         continue entryLoop
                     }
 
-                    for _ in 0..<(entry.size - entry.consumed) {
+                    for _ in 0 ..< (entry.size - entry.consumed) {
                         operation(entry)
                     }
                     entry.consumed = entry.size
                     entries[entryIndex] = entry
                 case .blank:
-                    // When we encounter a blank, we should consume from the end of the entries list until we fill the blank
-                    // Ensure that the tail entry is not a blank
+                    // When we encounter a blank, we should consume from the end of the entries list until we fill the
+                    // blank. Ensure that the tail entry is not a blank
                     var tailEntry = entries[tailFileIndex]
 
-                    for _ in 0..<entry.size {
+                    for _ in 0 ..< entry.size {
                         // If we already consumed the most recent file then we need to move to the previous
                         while tailEntry.consumed == tailEntry.size, tailFileIndex >= 0 {
                             tailFileIndex = indexOfFileAtOrBefore(index: tailFileIndex - 1)
@@ -131,7 +134,7 @@ struct Day9: ParsableCommand {
         }
 
         mutating func resetConsumed() {
-            for entryIndex in 0..<entries.count {
+            for entryIndex in 0 ..< entries.count {
                 entries[entryIndex].consumed = 0
             }
         }
@@ -140,7 +143,7 @@ struct Day9: ParsableCommand {
             var result = Array(repeating: ".", count: totalCount)
             var resultIndex = 0
             defrag(operation: { entry in
-                if case .file(index: let index) = entry.kind {
+                if case let .file(index: index) = entry.kind {
                     result[resultIndex] = "\(index)"
                 }
                 resultIndex += 1
@@ -156,7 +159,7 @@ struct Day9: ParsableCommand {
                 defer { resultIndex += entry.size }
                 guard case let .file(index) = entry.kind else { continue }
 
-                for writeIndex in 0..<entry.size {
+                for writeIndex in 0 ..< entry.size {
                     result[resultIndex + writeIndex] = "\(index)"
                 }
             }
@@ -167,7 +170,7 @@ struct Day9: ParsableCommand {
             var result = 0
             var resultIndex = 0
             defrag(operation: { entry in
-                if case .file(index: let index) = entry.kind {
+                if case let .file(index: index) = entry.kind {
                     result += index * resultIndex
                 }
                 resultIndex += 1
@@ -180,11 +183,11 @@ struct Day9: ParsableCommand {
             // We need to compact all consecutive blank entries into a single blank entry
             var result = entries
             var currentIndex = 0
-            var priorBlankIndex: Int? = nil
+            var priorBlankIndex: Int?
             while currentIndex < result.count {
                 let currentEntry = result[currentIndex]
                 if case .blank = currentEntry.kind {
-                    if let priorBlankIndex = priorBlankIndex {
+                    if let priorBlankIndex {
                         result[priorBlankIndex].size += currentEntry.size
                         result.remove(at: currentIndex)
                         continue
@@ -199,8 +202,9 @@ struct Day9: ParsableCommand {
             return result
         }
 
+        // swiftlint:disable:next function_body_length
         func wholeFileDefragged() {
-            var entries = self.entries
+            var entries = entries
 
             var tailEntryIndex = entries.count - 1
             tailScanLoop: while tailEntryIndex >= 0 {
@@ -236,24 +240,36 @@ struct Day9: ParsableCommand {
                         break forwardScanLoop
                     }
 
-                    // If we find a blank that is greater than the file size, then we resize the blank to the remainder and insert the file in front of it
+                    // If we find a blank that is greater than the file size, then we resize the blank to the remainder
+                    // and insert the file in front of it
                     if blankEntry.size > fileEntry.size {
                         // We know we are going to remove the tail entry so get rid of it fast
                         entries.remove(at: tailEntryIndex)
                         blankEntry.size -= fileEntry.size
                         entries[frontEntryIndex] = blankEntry
                         entries.insert(fileEntry, at: frontEntryIndex)
-                        entries.insert(.blank(size: fileEntry.size, originalIndex: fileEntry.originalIndex), at: tailEntryIndex)
+                        entries.insert(
+                            .blank(
+                                size: fileEntry.size,
+                                originalIndex: fileEntry.originalIndex),
+                            at: tailEntryIndex
+                        )
                         entries = compact(entries: entries)
                         // We have done two operations before the compaction:
                         // - Inserted a file entry in front of the current tail index
                         // - Replaced the file entry's prior location with a blank entry
-                        // That leaves us with a +1 size to the array before compaction and the tail index pointing to a blank entry
-                        // However, once we compact we will have merged up to 3 entries into a single blank entry, all of which will be around the current tail index. We need to consider the three cases:
-                        // - There were no blanks around the replaced index and the array is the same length as before. We can decrement the tail index as usual.
-                        // - There was one blank after the replaced index and compaction only changed the array behind the tail index. We can decrement the tail index as usual.
-                        // - There was one blank before the replaced index and the compaction reduced the array length by 1. Our tail index is now pointing to the file entry _behind_ the one we just addressed. If we decrement the tail index as usual we will point to the newly compacted blank and then proceed as normal.
-                        // - There was one blank before the replaced index and one blank after the replaced index. The compaction reduced the array length by 2, but all that matters is that the index before was compressed into the current. We are now pointing to the file entry after the one we replaced and we should decrement the tail index by 1.
+                        // That leaves us with a +1 size to the array before compaction and the tail index pointing to
+                        // a blank entry
+                        // However, once we compact we will have merged up to 3 entries into a single blank entry, all
+                        // of which will be around the current tail index. We need to consider the three cases:
+                        // - There were no blanks around the replaced index and the array is the same length as before.
+                        //   We can decrement the tail index as usual.
+                        // - There was one blank after the replaced index and compaction only changed the array behind
+                        //   the tail index. We can decrement the tail index as usual.
+                        // - There was one blank before the replaced index and one blank after the replaced index. The
+                        //   compaction reduced the array length by 2, but all that matters is that the index before was
+                        //   compressed into the current. We are now pointing to the file entry after the one we
+                        //   replaced and we should decrement the tail index by 1.
                         break forwardScanLoop
                     }
                 }
@@ -262,8 +278,8 @@ struct Day9: ParsableCommand {
             var result = 0
             var resultIndex = 0
             for entry in entries {
-                for _ in 0..<entry.size {
-                    if case .file(index: let index) = entry.kind {
+                for _ in 0 ..< entry.size {
+                    if case let .file(index: index) = entry.kind {
                         result += index * resultIndex
                     }
                     resultIndex += 1
@@ -306,9 +322,8 @@ struct Day9: ParsableCommand {
         func run() throws {
             let contents = try String(contentsOf: options.input, encoding: .utf8)
             let trimmed = contents.trimmingCharacters(in: .whitespacesAndNewlines)
-            var diskMap = DiskMap(input: trimmed)
+            let diskMap = DiskMap(input: trimmed)
             diskMap.wholeFileDefragged()
         }
     }
 }
-
