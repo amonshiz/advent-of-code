@@ -251,7 +251,8 @@ struct Day9: ParsableCommand {
                         entries.insert(
                             .blank(
                                 size: fileEntry.size,
-                                originalIndex: fileEntry.originalIndex),
+                                originalIndex: fileEntry.originalIndex
+                            ),
                             at: tailEntryIndex
                         )
                         entries = compact(entries: entries)

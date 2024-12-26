@@ -11,20 +11,33 @@ struct Day10: ParsableCommand {
     )
 
     struct Location: Hashable {
+        // swiftlint:disable:next identifier_name
         let x: Int
+        // swiftlint:disable:next identifier_name
         let y: Int
     }
 
     struct Map {
         let grid: [[Int?]]
+        let startLocations: [Location]
 
         init(input: String) {
             let rows = input.split(separator: "\n").map { String($0) }
-            self.grid = rows.map { row in
+            grid = rows.map { row in
                 row.map { char in
                     Int(String(char))
                 }
             }
+
+            var startLocations: [Location] = []
+            // swiftlint:disable identifier_name
+            for y in 0 ..< grid.count {
+                for x in 0 ..< grid[y].count where grid[y][x] == 0 {
+                    startLocations.append(Location(x: x, y: y))
+                }
+            }
+            // swiftlint:enable identifier_name
+            self.startLocations = startLocations
         }
 
         var debugDescription: String {
@@ -35,9 +48,10 @@ struct Day10: ParsableCommand {
             }.joined(separator: "\n")
         }
 
+        // swiftlint:disable:next identifier_name
         func canMove(from: Location, to: Location) -> Bool {
             guard to.x >= 0, to.x < grid[0].count,
-                    to.y >= 0, to.y < grid.count else {
+                  to.y >= 0, to.y < grid.count else {
                 return false
             }
 
@@ -54,15 +68,6 @@ struct Day10: ParsableCommand {
         }
 
         func rate() -> Int {
-            var startLocations: [Location] = []
-            for y in 0..<grid.count {
-                for x in 0..<grid[y].count {
-                    if grid[y][x] == 0 {
-                        startLocations.append(Location(x: x, y: y))
-                    }
-                }
-            }
-
             var paths: [Location: Set<Set<Location>>] = [:]
 
             func buildPaths(from: Location) {
@@ -86,21 +91,21 @@ struct Day10: ParsableCommand {
 
                 let left = Location(x: from.x - 1, y: from.y)
                 let right = Location(x: from.x + 1, y: from.y)
+                // swiftlint:disable identifier_name
                 let up = Location(x: from.x, y: from.y - 1)
                 let down = Location(x: from.x, y: from.y + 1)
+                // swiftlint:enable identifier_name
 
                 var uniquePaths: Set<Set<Location>> = []
-                for direction in [left, right, up, down] {
-                    if canMove(from: from, to: direction) {
-                        buildPaths(from: direction)
-                        let originalPaths = paths[direction, default: []]
-                        var newPaths: Set<Set<Location>> = []
-                        for var path in originalPaths {
-                            path.insert(from)
-                            newPaths.insert(path)
-                        }
-                        uniquePaths.formUnion(newPaths)
+                for direction in [left, right, up, down] where canMove(from: from, to: direction) {
+                    buildPaths(from: direction)
+                    let originalPaths = paths[direction, default: []]
+                    var newPaths: Set<Set<Location>> = []
+                    for var path in originalPaths {
+                        path.insert(from)
+                        newPaths.insert(path)
                     }
+                    uniquePaths.formUnion(newPaths)
                 }
 
                 paths[from] = uniquePaths
@@ -116,15 +121,7 @@ struct Day10: ParsableCommand {
         }
 
         func score() -> Int {
-            var startLocations: [Location] = []
             var pathCounts: [Location: Set<Location>] = [:]
-            for y in 0..<grid.count {
-                for x in 0..<grid[y].count {
-                    if grid[y][x] == 0 {
-                        startLocations.append(Location(x: x, y: y))
-                    }
-                }
-            }
 
             func buildEligiblePaths(from: Location) {
                 guard let current = grid[from.y][from.x] else {
@@ -143,15 +140,15 @@ struct Day10: ParsableCommand {
 
                 let left = Location(x: from.x - 1, y: from.y)
                 let right = Location(x: from.x + 1, y: from.y)
+                // swiftlint:disable identifier_name
                 let up = Location(x: from.x, y: from.y - 1)
                 let down = Location(x: from.x, y: from.y + 1)
+                // swiftlint:enable identifier_name
 
                 var uniqueNines: Set<Location> = []
-                for direction in [left, right, up, down] {
-                    if canMove(from: from, to: direction) {
-                        buildEligiblePaths(from: direction)
-                        uniqueNines.formUnion(pathCounts[direction, default: []])
-                    }
+                for direction in [left, right, up, down] where canMove(from: from, to: direction) {
+                    buildEligiblePaths(from: direction)
+                    uniqueNines.formUnion(pathCounts[direction, default: []])
                 }
 
                 pathCounts[from] = uniqueNines
@@ -160,10 +157,6 @@ struct Day10: ParsableCommand {
             for startLocation in startLocations {
                 buildEligiblePaths(from: startLocation)
             }
-            // print(pathCounts)
-            // print(pathCounts.reduce(into: [Location: Int]()) { acc, next in
-            //     acc[next.key] = next.value.count
-            // })
 
             var result = 0
             for startLocation in startLocations {
@@ -209,4 +202,3 @@ struct Day10: ParsableCommand {
         }
     }
 }
-
