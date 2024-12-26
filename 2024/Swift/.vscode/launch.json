@@ -276,7 +276,21 @@
                 "${workspaceFolder:problems}/day10-1.txt"
             ],
             "cwd": "${workspaceFolder:Swift}",
-            "name": "Day10 part1 (sample1)",
+            "name": "Day10 part1",
+            "program": "${workspaceFolder:Swift}/.build/debug/aoc2024",
+            "preLaunchTask": "swift: Build Debug aoc2024"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "args": [
+                "day10",
+                "part2",
+                "--input",
+                "${workspaceFolder:problems}/day10-1.txt"
+            ],
+            "cwd": "${workspaceFolder:Swift}",
+            "name": "Day10 part2",
             "program": "${workspaceFolder:Swift}/.build/debug/aoc2024",
             "preLaunchTask": "swift: Build Debug aoc2024"
         },
