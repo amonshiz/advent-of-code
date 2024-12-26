@@ -65,7 +65,7 @@ struct Day11: ParsableCommand {
             let trimmed = contents.trimmingCharacters(in: .whitespacesAndNewlines)
             let stones = try StonesParser().parse(trimmed)
             var result = stones
-            for _ in 0..<numSteps {
+            for _ in 0 ..< numSteps {
                 result = result.flatMap { $0.step() }
             }
             print(result.count)
@@ -92,7 +92,8 @@ struct Day11: ParsableCommand {
                 let count: Int
             }
 
-            // Map of stone number && remaining steps to number of stones that will be there after those remaining steps are complted.
+            // Map of stone number && remaining steps to number of stones that will be there after those remaining steps
+            // are complted.
             var resultCountCache = [StepResult: Int]()
             func numberOfStonesAfterSteps(stone: Stone, currentStep: Int) -> Int {
                 let key = StepResult(numSteps: currentStep, count: stone.value)
@@ -124,4 +125,3 @@ struct Day11: ParsableCommand {
         }
     }
 }
-
